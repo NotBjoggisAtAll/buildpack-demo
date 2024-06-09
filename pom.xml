@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.3.0</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  <groupId>no.jonasandersen</groupId>
+  <artifactId>buildpack-demo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>buildpack-demo</name>
+  <description>buildpack-demo</description>
+  <properties>
+    <java.version>22</java.version>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.graalvm.buildtools</groupId>
+        <artifactId>native-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>build-info</id>
+            <goals>
+              <goal>build-info</goal>
+            </goals>
+          </execution>
+          <execution>
+            <goals>
+              <goal>build-image-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <image>
+            <builder>paketobuildpacks/builder-jammy-buildpackless-tiny</builder>
+            <buildpacks>
+              <buildpack>paketobuildpacks/java-native-image</buildpack>
+            </buildpacks>
+            <env>
+              <!--              <BPL_SPRING_AOT_ENABLED>true</BPL_SPRING_AOT_ENABLED>-->
+              <!--              <BP_JVM_CDS_ENABLED>true</BP_JVM_CDS_ENABLED>-->
+              <BP_JVM_VERSION>22</BP_JVM_VERSION>
+              <BP_NATIVE_IMAGE_BUILD_ARGUMENTS>-H:-AddAllFileSystemProviders</BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
+              <!--              <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>-->
+            </env>
+          </image>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
