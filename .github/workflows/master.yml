@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ ubuntu-latest, ubuntu-24.04 ubuntu-20.04, windows-2022, macos-14, self-hosted ]
+        os: [ ubuntu-latest, ubuntu-24.04 ubuntu-20.04, self-hosted ]
     runs-on: ${{ matrix.os }}
     permissions:
       contents: read
